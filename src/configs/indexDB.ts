@@ -179,7 +179,7 @@ export async function getAllPatientRecords(
 // Populate data for pages if not already populated
 (async function populateDatabase() {
   await initializeDatabase();
-  for (let page = 1; page <= 10; page++) {
+  for (let page = 1; page <= 1000; page++) {
     const existingData = await getPageData(page);
     if (existingData.length === 0) {
       const items: Record[] = Array.from({ length: 1000 }, (_, i) => ({
