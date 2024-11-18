@@ -41,9 +41,24 @@ const PaginatedSearchableTable: React.FC = () => {
       key: 'id',
     },
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: 'Body',
+      dataIndex: 'body',
+      key: 'body',
+    },
+    {
+      title: 'created_date',
+      dataIndex: 'created_date',
+      key: 'created_date',
+    },
+    {
+      title: 'reservation_date',
+      dataIndex: 'reservation_date',
+      key: 'reservation_date',
     },
   ];
 
@@ -65,7 +80,7 @@ const PaginatedSearchableTable: React.FC = () => {
       <Pagination
         current={currentPage}
         onChange={handlePageChange}
-        total={30} // Assume 10 items per page, 3 pages
+        total={10000} // Assume 10 items per page, 3 pages
         pageSize={10}
         style={{ marginTop: '20px', textAlign: 'center' }}
       />

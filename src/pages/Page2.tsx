@@ -1,42 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Input, Pagination, Spin } from 'antd';
-import { getAllPatientRecords } from '../configs/indexDB';
+import { getPatientRecords } from '../configs/indexDB';
 import { PatientRecord } from '../configs/indexDB';
 
 const { Search } = Input;
 
 const PatientRecordsPage: React.FC = () => {
-  const [patientRecords, setPatientRecords] = useState<PatientRecord[]>([]);
+  const [data, setData] = useState<PatientRecord[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalRecords, setTotalRecords] = useState<number>(0);
 
   useEffect(() => {
-    const loadPatientRecords = async () => {
+    const loadData = async () => {
       setLoading(true);
-
-      // Fetch paginated records with search term
-      const fetchedRecords = await getAllPatientRecords(searchTerm, currentPage, 10);
-      setPatientRecords(fetchedRecords);
-
-      // Fetch total count for pagination
-      const allRecords = await getAllPatientRecords(searchTerm);
-      setTotalRecords(allRecords.length);
-
+      const pageData = await getPatientRecords(currentPage, searchTerm);
+      console.log(pageData)
+      setData(pageData);
       setLoading(false);
     };
 
-    loadPatientRecords();
-  }, [searchTerm, currentPage]);
-
-  const handleSearch = (value: string) => {
-    setSearchTerm(value);
-    setCurrentPage(1); // Reset to the first page on search
-  };
+    loadData();
+  }, [currentPage, searchTerm]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1); // Reset to page 1 on new search
   };
 
   const columns = [
@@ -78,14 +71,14 @@ const PatientRecordsPage: React.FC = () => {
           <Table
             loading={loading}
             columns={columns}
-            dataSource={patientRecords}
+            dataSource={data}
             pagination={false}
             rowKey="id"
           />
           <Pagination
             current={currentPage}
             onChange={handlePageChange}
-            total={totalRecords}
+            total={10000}
             pageSize={10}
             style={{ marginTop: '20px', textAlign: 'center' }}
           />
