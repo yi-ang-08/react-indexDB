@@ -43,7 +43,7 @@ export async function initializeDatabase(): Promise<IDBPDatabase> {
   });
 }
 
-export async function insertData(page: number, items: Record[]): Promise<void> {
+export async function insertData( items: Record[]): Promise<void> {
   const db = await initializeDatabase();
   const key = await deriveKeyFromToken(salt); // Lấy khóa từ token
 
@@ -99,7 +99,6 @@ export async function getPageData(
 }
 
 export async function insertPatientRecords(
-  page: number,
   records: PatientRecord[]
 ): Promise<void> {
   const db = await initializeDatabase();
@@ -173,7 +172,7 @@ export async function getPatientRecords(
         reservation_date: new Date(Date.now() + i * 86400000).toISOString(),
         page,
       }));
-      await insertData(page, items);
+      await insertData(items);
     }
   }
 
@@ -186,7 +185,7 @@ export async function getPatientRecords(
         body: `Long Body ${i + 1}: ` + "Content ".repeat(200), // Nội dung rất dài
         createdAt: new Date().toISOString(),
       }));
-      await insertPatientRecords(page, items);
+      await insertPatientRecords(items);
     }
   }
 
