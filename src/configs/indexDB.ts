@@ -89,7 +89,8 @@ export async function getPageData(
 
   return searchTerm
     ? decryptedData.filter((item) =>
-        item.name?.toLowerCase().includes(searchTerm?.toLowerCase())
+        item.title?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+        item.body?.toLowerCase().includes(searchTerm?.toLowerCase())
       )
     : decryptedData;
 }
