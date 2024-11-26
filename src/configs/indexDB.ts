@@ -47,7 +47,6 @@ export async function insertData( items: Record[]): Promise<void> {
   const db = await initializeDatabase();
   const key = await deriveKeyFromToken(salt); // Lấy khóa từ token
 
-  console.time("Encryption Time"); // Bắt đầu đo thời gian mã hóa
   const encryptedItems = await Promise.all(
     items.map(async (item) => ({
       ...item,
@@ -55,7 +54,6 @@ export async function insertData( items: Record[]): Promise<void> {
       body: await encryptData(item.body, key),
     }))
   );
-  console.timeEnd("Encryption Time"); // Kết thúc đo thời gian mã hóa
 
   // Bắt đầu transaction sau khi tất cả dữ liệu đã mã hóa
   const tx = db.transaction("records", "readwrite");
@@ -81,7 +79,6 @@ export async function getPageData(
   const allData = await store.getAll(IDBKeyRange.only(page));
   const key = await deriveKeyFromToken(salt); // Lấy khóa từ token
 
-  // console.time("Decryption Time"); // Bắt đầu đo thời gian giải mã
   const decryptedData = await Promise.all(
     allData.map(async (item) => ({
       ...item,
@@ -89,7 +86,6 @@ export async function getPageData(
       body: await decryptData(item.body, key),
     }))
   );
-  // console.timeEnd("Decryption Time"); // Kết thúc đo thời gian giải mã
 
   return searchTerm
     ? decryptedData.filter((item) =>
@@ -104,7 +100,6 @@ export async function insertPatientRecords(
   const db = await initializeDatabase();
   const key = await deriveKeyFromToken(salt); // Lấy khóa từ token
 
-  // console.time("Encryption Time"); // Bắt đầu đo thời gian mã hóa
   const encryptedItems = await Promise.all(
     records.map(async (item) => ({
       ...item,
@@ -113,7 +108,6 @@ export async function insertPatientRecords(
       body: await encryptData(item.body, key),
     }))
   );
-  // console.timeEnd("Encryption Time"); // Kết thúc đo thời gian mã hóa
 
   // Bắt đầu transaction sau khi tất cả dữ liệu đã mã hóa
   const tx = db.transaction("patientRecords", "readwrite");
@@ -138,8 +132,6 @@ export async function getPatientRecords(
 
   const allData = await store.getAll(IDBKeyRange.only(page));
   const key = await deriveKeyFromToken(salt); // Lấy khóa từ token
-  console.log(allData);
-  console.time("Decryption Time"); // Bắt đầu đo thời gian giải mã
   const decryptedData = await Promise.all(
     allData.map(async (item) => ({
       ...item,
@@ -148,7 +140,6 @@ export async function getPatientRecords(
       body: await decryptData(item.body, key),
     }))
   );
-  console.timeEnd("Decryption Time"); // Kết thúc đo thời gian giải mã
 
   return searchTerm
     ? decryptedData.filter(
