@@ -89,7 +89,7 @@ export async function getPageData(
 
   return searchTerm
     ? decryptedData.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        item.name?.toLowerCase().includes(searchTerm?.toLowerCase())
       )
     : decryptedData;
 }
@@ -144,8 +144,8 @@ export async function getPatientRecords(
   return searchTerm
     ? decryptedData.filter(
         (item) =>
-          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.diagnosis.toLowerCase().includes(searchTerm.toLowerCase())
+          item.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+          item.diagnosis?.toLowerCase().includes(searchTerm?.toLowerCase())
       )
     : decryptedData;
 }
